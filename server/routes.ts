@@ -1,7 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { createNoBS } from "./openai";
+import { createGPTyrant } from "./gptyrant";
 import { ChatMessage, chatCompletionRequestSchema, chatMessageSchema } from "@shared/schema";
 import { z } from "zod";
 
@@ -28,18 +28,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!apiKey) {
         return res.status(400).json({ 
-          message: 'OpenAI API key is required. Provide it in the X-API-Key header or set the OPENAI_API_KEY environment variable.' 
+          message: 'API key is required. Provide it in the X-API-Key header or set the OPENAI_API_KEY environment variable.' 
         });
       }
       
-      // Create NoBS instance with the API key
-      const noBs = createNoBS(apiKey);
+      // Create GPTyrant instance with the API key and settings
+      const tyrant = createGPTyrant({
+        apiKey,
+        model,
+        sassLevel,
+        focusAreas,
+        provider: 'openai' // Default to OpenAI provider
+      });
       
       // Generate the completion
-      const response = await noBs.generateCompletion(messages, { 
-        sassLevel, 
-        focusAreas 
-      });
+      const response = await tyrant.generateResponse(messages);
       
       // Return the response
       return res.json({ 

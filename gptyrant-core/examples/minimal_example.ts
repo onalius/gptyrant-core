@@ -37,7 +37,7 @@ async function runMinimalExample() {
   console.log('Example 2: Using message array');
   try {
     const messages = [
-      { role: 'user', content: 'I keep saying I'll start eating healthy tomorrow.' }
+      { role: 'user', content: "I keep saying I'll start eating healthy tomorrow." }
     ];
     
     const response2 = await tyrant.generateResponse(messages);
