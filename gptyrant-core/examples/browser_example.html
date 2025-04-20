@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPTyrant Browser Example</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2a2a2a;
+      margin-bottom: 30px;
+    }
+    .container {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    textarea {
+      min-height: 100px;
+    }
+    button {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      display: block;
+      margin: 20px auto;
+    }
+    button:hover {
+      background-color: #0055aa;
+    }
+    .response {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f3f3f3;
+      border-left: 5px solid #0066cc;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      display: none;
+    }
+    .loader {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #0066cc;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>GPTyrant Browser Example</h1>
+  
+  <div class="container">
+    <div class="form-group">
+      <label for="api-key">OpenAI API Key:</label>
+      <input type="text" id="api-key" placeholder="sk-..." required>
+    </div>
+    
+    <div class="form-group">
+      <label for="sass-level">Sass Level (1-10):</label>
+      <select id="sass-level">
+        <option value="3">3 - Gentle Push</option>
+        <option value="5">5 - Moderate</option>
+        <option value="7" selected>7 - Firm Push</option>
+        <option value="9">9 - Very Harsh</option>
+        <option value="10">10 - Maximum Intensity</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="focus-areas">Focus Areas (comma-separated):</label>
+      <input type="text" id="focus-areas" value="procrastination, excuses, motivation">
+    </div>
+    
+    <div class="form-group">
+      <label for="user-message">Your Message:</label>
+      <textarea id="user-message" placeholder="Type your message here... (e.g., 'I want to start a business but I'm afraid of failing')"></textarea>
+    </div>
+    
+    <button id="submit-btn">Get Tough Love Response</button>
+    
+    <div class="loader" id="loader">
+      <div class="spinner"></div>
+      <p>Generating response...</p>
+    </div>
+    
+    <div class="response" id="response"></div>
+  </div>
+
+  <!-- Include the GPTyrant web script -->
+  <script src="../gptyrant_web.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const submitBtn = document.getElementById('submit-btn');
+      const apiKeyInput = document.getElementById('api-key');
+      const sassLevelSelect = document.getElementById('sass-level');
+      const focusAreasInput = document.getElementById('focus-areas');
+      const userMessageTextarea = document.getElementById('user-message');
+      const responseDiv = document.getElementById('response');
+      const loader = document.getElementById('loader');
+      
+      submitBtn.addEventListener('click', async function() {
+        // Validate inputs
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) {
+          alert('Please enter your OpenAI API key');
+          return;
+        }
+        
+        const userMessage = userMessageTextarea.value.trim();
+        if (!userMessage) {
+          alert('Please enter a message');
+          return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        loader.style.display = 'block';
+        responseDiv.style.display = 'none';
+        
+        try {
+          // Create GPTyrant instance
+          const sassLevel = parseInt(sassLevelSelect.value);
+          const focusAreas = focusAreasInput.value
+            .split(',')
+            .map(area => area.trim())
+            .filter(area => area);
+            
+          const tyrant = GPTyrant.create(apiKey, {
+            sassLevel,
+            focusAreas,
+            model: 'gpt-4o' // the newest OpenAI model is "gpt-4o" which was released May 13, 2024
+          });
+          
+          // Generate response
+          const response = await tyrant.generateResponse(userMessage);
+          
+          // Display response
+          responseDiv.textContent = response;
+          responseDiv.style.display = 'block';
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error: ' + (error.message || 'Failed to generate response'));
+          responseDiv.textContent = 'Error: ' + (error.message || 'Failed to generate response');
+          responseDiv.style.display = 'block';
+        } finally {
+          // Reset loading state
+          submitBtn.disabled = false;
+          loader.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
