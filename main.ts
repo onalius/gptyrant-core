@@ -16,13 +16,36 @@
 
 import { createTyrant, generateToughLoveResponse } from './gptyrant';
 
-// Retrieve API key from environment
-const API_KEY = process.env.OPENAI_API_KEY;
+// Retrieve API keys from environment variables
+const api_keys = {
+  openai: process.env.OPENAI_API_KEY || "",
+  anthropic: process.env.ANTHROPIC_API_KEY || "",
+  grok: process.env.XAI_API_KEY || "",
+  vertex: process.env.GOOGLE_API_KEY || ""
+};
 
-if (!API_KEY) {
-  console.error('Error: OpenAI API key is required. Set the OPENAI_API_KEY environment variable.');
+// Check if we have at least one API key available
+if (!api_keys.openai && !api_keys.anthropic && !api_keys.grok && !api_keys.vertex) {
+  console.error(`
+Error: No API keys found. Please set at least one of the following environment variables:
+  - OPENAI_API_KEY (for OpenAI models)
+  - ANTHROPIC_API_KEY (for Claude models)
+  - XAI_API_KEY (for Grok models)
+  - GOOGLE_API_KEY (for Vertex AI models)
+  
+For this demo, we'll be using OpenAI as the default provider.
+`);
   process.exit(1);
 }
+
+// Select the first available API key and provider for the demo
+const selectedProvider = api_keys.openai ? 'openai' : 
+                        api_keys.anthropic ? 'anthropic' : 
+                        api_keys.grok ? 'grok' : 'vertex';
+
+const API_KEY = api_keys[selectedProvider];
+
+console.log(`Using provider: ${selectedProvider}`);
 
 async function runDemo() {
   console.log('GPTyrant Demo\n============\n');

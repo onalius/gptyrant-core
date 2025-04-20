@@ -1,120 +1,142 @@
-# Installation Guide for GPTyrant
+# GPTyrant Installation Guide
 
-This guide covers various ways to install and integrate GPTyrant into your projects.
+This document provides detailed installation instructions for the GPTyrant library.
 
-## Table of Contents
+## Prerequisites
 
-- [NPM Installation (Node.js/TypeScript)](#npm-installation-nodejs-typescript)
-- [Browser Installation](#browser-installation)
-- [Manual Installation](#manual-installation)
-- [API Key Requirements](#api-key-requirements)
+- Node.js 16.x or higher
+- npm 7.x or higher
 
-## NPM Installation (Node.js/TypeScript)
+## Installation Options
 
-### Prerequisites
+### 1. NPM Package (Recommended)
 
-- Node.js 16 or higher
-- npm or yarn
-
-### Installation Steps
-
-1. Add GPTyrant to your project:
+The simplest way to install GPTyrant is through npm:
 
 ```bash
-# Using npm
-npm install gptyrant-core
-
-# Using yarn
-yarn add gptyrant-core
+npm install gptyrant
 ```
 
-2. Import and use GPTyrant in your code:
+This installs the full package with all providers and features.
+
+### 2. Standalone Files
+
+For simpler projects or specific use cases, you can directly use one of the standalone files:
+
+#### Minimal Version (TypeScript)
+
+The `gptyrant_minimal.ts` file provides a simple implementation with OpenAI support only.
+
+1. Download the file from the repository
+2. Include it directly in your TypeScript project:
 
 ```typescript
-// Using ES Modules
-import { GPTyrant } from 'gptyrant-core';
+import { createGPTyrant } from './path/to/gptyrant_minimal';
 
-// Using CommonJS
-const { GPTyrant } = require('gptyrant-core');
+const tyrant = createGPTyrant('your-api-key');
 ```
 
-## Browser Installation
+#### Web Version (JavaScript)
 
-### Direct Script Tag
+The `gptyrant_web.js` file provides a browser-compatible version that works directly in web pages.
 
-1. Download the `gptyrant_web.js` file from this repository or include it via CDN (example CDN link would be here if published)
-
+1. Download the file from the repository
 2. Include it in your HTML:
 
 ```html
-<script src="gptyrant_web.js"></script>
-<!-- Or via CDN -->
-<script src="https://cdn.example.com/gptyrant_web.js"></script>
-```
-
-3. Use GPTyrant in your JavaScript code:
-
-```html
+<script src="path/to/gptyrant_web.js"></script>
 <script>
   const tyrant = GPTyrant.create('your-api-key');
-  
-  // Use tyrant methods
-  tyrant.generateResponse('Help me stay motivated')
-    .then(response => {
-      console.log(response);
-    });
 </script>
 ```
 
-### As an ES Module in Modern Browsers
+### 3. Clone Repository (For Development)
 
-```html
-<script type="module">
-  import { GPTyrant } from './path/to/gptyrant-core/index.js';
-  
-  const tyrant = new GPTyrant('your-api-key');
-  // Use tyrant...
-</script>
+If you want to contribute or modify the library:
+
+```bash
+git clone https://github.com/yourusername/gptyrant.git
+cd gptyrant
+npm install
+npm run build
 ```
-
-## Manual Installation
-
-For projects without a package manager:
-
-1. Download or clone this repository
-2. Copy one of the following files to your project:
-   - Full package: Copy the entire `src` directory
-   - Minimal version: Copy just `gptyrant_minimal.ts` (for TypeScript projects)
-   - Web version: Copy just `gptyrant_web.js` (for browser projects)
-3. Import or include the file according to your project setup
 
 ## API Key Requirements
 
-GPTyrant supports multiple AI providers, each requiring its own API key:
+GPTyrant requires an API key from at least one of the supported AI providers:
 
-### OpenAI (Default Provider)
+1. **OpenAI** (default provider)
+   - Sign up at [OpenAI Platform](https://platform.openai.com/)
+   - Create an API key in your account dashboard
+   - Requires a paid account for production usage
 
-- Sign up at [OpenAI Platform](https://platform.openai.com/)
-- Create an API key in your account dashboard
-- Required for using models like GPT-4, GPT-4o, etc.
+2. **Anthropic** (Claude)
+   - Sign up at [Anthropic Console](https://console.anthropic.com/)
+   - Create an API key in your account dashboard
+   - Requires approval for Claude API access
 
-### Anthropic
+3. **xAI** (Grok)
+   - Sign up at [xAI Platform](https://platform.x.ai/)
+   - Create an API key in your account dashboard
 
-- Sign up at [Anthropic](https://www.anthropic.com/)
-- Get access to the Claude API
-- Required for using Claude models
+4. **Google** (Vertex AI)
+   - Sign up for Google Cloud Platform
+   - Enable the Vertex AI API
+   - Create API credentials in the Google Cloud Console
 
-### Grok (xAI)
+## Setting Up Your Environment
 
-- Sign up for Grok API access at [X.AI](https://www.x.ai/)
-- Get your API key from the developer portal
-- Required for using Grok models
+It's recommended to set up your API keys as environment variables:
 
-### Google Vertex AI
+```bash
+# For OpenAI
+export OPENAI_API_KEY="your-openai-key"
 
-- Create a Google Cloud account
-- Enable the Vertex AI API
-- Set up authentication credentials
-- Required for using Gemini models
+# For Anthropic
+export ANTHROPIC_API_KEY="your-anthropic-key"
 
-For detailed instructions on obtaining and using these API keys, please consult each provider's documentation.
+# For xAI
+export XAI_API_KEY="your-xai-key"
+
+# For Google Vertex AI
+export GOOGLE_APPLICATION_CREDENTIALS="path/to/credentials.json"
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Key Authentication Errors**
+   - Ensure your API key is valid
+   - Check that you're using the correct API key for the provider
+   - Verify your account status with the provider
+
+2. **Import Errors**
+   - If you get TypeScript import errors, make sure you've installed the package properly
+   - For direct file imports, check the path is correct
+
+3. **Rate Limiting**
+   - Most AI providers have rate limits for API calls
+   - Implement back-off strategies for high-volume usage
+
+4. **Missing Peer Dependencies**
+   - If using multiple providers, install their respective SDKs:
+     ```bash
+     npm install openai @anthropic-ai/sdk
+     ```
+
+## Next Steps
+
+Once installed, check out:
+
+- [API Documentation](./API_DOCS.md) - Detailed API reference
+- [Examples](../examples) - Code examples for various use cases
+- [README](../README.md) - Overview and quick start guide
+
+## Support
+
+If you encounter any issues with installation:
+
+1. Check the documentation
+2. Look through existing GitHub Issues
+3. Create a new Issue with detailed information about the problem

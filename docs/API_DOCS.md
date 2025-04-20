@@ -1,157 +1,257 @@
 # GPTyrant API Documentation
 
-This document provides detailed information about the GPTyrant API, classes, and methods.
+This document provides detailed documentation for the GPTyrant API.
 
-## Table of Contents
+## Core Classes and Functions
 
-- [GPTyrant Class](#gptyrant-class)
-- [Provider Classes](#provider-classes)
-- [Types and Interfaces](#types-and-interfaces)
-- [Standalone Functions](#standalone-functions)
-- [Browser API](#browser-api)
+### `GPTyrant` Class
 
-## GPTyrant Class
-
-The main class for interacting with GPTyrant functionality.
-
-### Constructor
+The main class for creating and working with the GPTyrant AI assistant.
 
 ```typescript
-constructor(apiKey: string, options: Partial<TyrantOptions> = {})
+class GPTyrant {
+  constructor(apiKey: string, options?: Partial<TyrantOptions>);
+  
+  public getSystemPrompt(): Message;
+  public generateResponse(input: string | Message[]): Promise<string>;
+  public updateOptions(options: Partial<TyrantOptions>): void;
+  public setProvider(provider: ProviderType, apiKey: string, model?: string): void;
+}
 ```
+
+#### Constructor
 
 Creates a new GPTyrant instance.
 
 **Parameters:**
 - `apiKey` (string): API key for the selected provider
-- `options` (Partial\<TyrantOptions\>): Optional configuration
+- `options` (Partial\<TyrantOptions\>): Optional configuration options
 
 **Example:**
 ```typescript
 const tyrant = new GPTyrant('your-api-key', {
+  sassLevel: 7,
+  focusAreas: ['procrastination', 'fitness'],
   provider: 'openai',
-  sassLevel: 8,
-  focusAreas: ['procrastination']
+  model: 'gpt-4o'
 });
 ```
 
-### Methods
+#### Methods
 
-#### generateResponse
+##### `getSystemPrompt()`
 
-```typescript
-public async generateResponse(
-  messages: Message[],
-  options: Partial<TyrantOptions> = {}
-): Promise<string>
-```
+Returns the system prompt used to define the GPTyrant personality.
 
-Generates a response to a conversation.
+**Returns:** A system message object
+
+##### `generateResponse(input: string | Message[])`
+
+Generates a response to a user message or conversation.
 
 **Parameters:**
-- `messages` (Message[]): Array of messages in the conversation
-- `options` (Partial\<TyrantOptions\>): Optional runtime options to override defaults
+- `input`: Either a string message or an array of message objects
 
-**Returns:**
-- Promise\<string\>: A string containing the assistant's response
+**Returns:** A promise resolving to the assistant's response as a string
 
 **Example:**
 ```typescript
-const response = await tyrant.generateResponse([
-  { role: 'user', content: 'I keep procrastinating on my project' }
-]);
+// Using a string message
+const response = await tyrant.generateResponse('I keep putting off my project');
+
+// Using a message array for conversation history
+const conversation = [
+  { role: 'user', content: 'I want to get fit but never find time' },
+  { role: 'assistant', content: 'Stop with the excuses...' },
+  { role: 'user', content: 'But my schedule is really busy' }
+];
+const response = await tyrant.generateResponse(conversation);
 ```
 
-#### getSystemPrompt
-
-```typescript
-public getSystemPrompt(): Message
-```
-
-Gets the system prompt used for the conversation.
-
-**Returns:**
-- Message: A system message that defines the GPTyrant personality
-
-**Example:**
-```typescript
-const systemPrompt = tyrant.getSystemPrompt();
-console.log(systemPrompt.content);
-```
-
-#### updateOptions
-
-```typescript
-public updateOptions(options: Partial<TyrantOptions>): void
-```
+##### `updateOptions(options: Partial<TyrantOptions>)`
 
 Updates the configuration options for this GPTyrant instance.
 
 **Parameters:**
-- `options` (Partial\<TyrantOptions\>): New options to apply
+- `options`: New options to apply
 
 **Example:**
 ```typescript
-tyrant.updateOptions({ 
-  sassLevel: 10,
-  maxTokens: 800
+tyrant.updateOptions({
+  sassLevel: 9,
+  focusAreas: ['discipline', 'motivation']
 });
 ```
 
-#### setProvider
-
-```typescript
-public setProvider(provider: ProviderType, apiKey: string, model?: string): void
-```
+##### `setProvider(provider: ProviderType, apiKey: string, model?: string)`
 
 Changes the AI provider being used.
 
 **Parameters:**
-- `provider` (ProviderType): The provider type to switch to
-- `apiKey` (string): API key for the new provider
-- `model` (string, optional): Model to use with the new provider
+- `provider`: The provider type to switch to
+- `apiKey`: API key for the new provider
+- `model`: Optional model to use with the new provider
 
 **Example:**
 ```typescript
 tyrant.setProvider('anthropic', 'your-anthropic-api-key', 'claude-3-7-sonnet-20250219');
 ```
 
-## Provider Classes
+### Helper Functions
 
-GPTyrant includes several provider classes that implement the AIProvider interface.
+#### `createTyrant(apiKey: string, options?: Partial<TyrantOptions>)`
 
-### OpenAIProvider
+A factory function that creates a new GPTyrant instance.
 
+**Parameters:**
+- `apiKey` (string): API key for the selected provider
+- `options` (Partial\<TyrantOptions\>): Optional configuration options
+
+**Returns:** A new GPTyrant instance
+
+**Example:**
 ```typescript
-constructor(apiKey: string, model: string = DEFAULT_MODEL, organization?: string)
+import { createTyrant } from 'gptyrant';
+
+const tyrant = createTyrant('your-api-key', { sassLevel: 5 });
 ```
 
-### AnthropicProvider
+#### `generateToughLoveResponse(apiKey: string, message: string, options?: Partial<TyrantOptions>)`
 
+A one-shot function to generate a tough love response without creating an instance.
+
+**Parameters:**
+- `apiKey` (string): API key for the AI provider
+- `message` (string): User message to respond to
+- `options` (Partial\<TyrantOptions\>): Optional configuration options
+
+**Returns:** A promise resolving to the assistant's response as a string
+
+**Example:**
 ```typescript
-constructor(apiKey: string, model: string = DEFAULT_MODEL)
+import { generateToughLoveResponse } from 'gptyrant';
+
+const response = await generateToughLoveResponse(
+  'your-api-key',
+  'I keep procrastinating on my project',
+  { sassLevel: 8 }
+);
 ```
 
-### GrokProvider
+## Enhanced Version
+
+### `GPTyrantEnhanced` Class
+
+An extended version of GPTyrant with additional features.
 
 ```typescript
-constructor(apiKey: string, model: string = DEFAULT_MODEL)
+class GPTyrantEnhanced {
+  constructor(configPath?: string);
+  
+  public updateConfig(newConfig: Partial<EnhancedConfig>): void;
+  public setApiKey(apiKey: string, provider?: ProviderType): void;
+  public generateResponse(message: string): Promise<string>;
+  public saveCurrentConversation(): void;
+  public newConversation(systemPrompt?: string): void;
+  public addFeedback(feedback: string): void;
+  public getHistory(): ConversationEntry[];
+  public getCurrentConversation(): Message[];
+  public saveConfig(): void;
+}
 ```
 
-### VertexProvider
+#### Constructor
 
+Creates a new enhanced GPTyrant instance with conversation management and additional features.
+
+**Parameters:**
+- `configPath` (string, optional): Path to the configuration file
+
+**Example:**
 ```typescript
-constructor(apiKey: string, model: string = DEFAULT_MODEL)
+import { GPTyrantEnhanced } from 'gptyrant/enhanced';
+
+const enhancedTyrant = new GPTyrantEnhanced();
 ```
 
-Each provider implements:
+#### Methods
 
-- `getSystemPrompt(options: TyrantOptions): Message`
-- `generateCompletion(messages: Message[], options: TyrantOptions): Promise<string>`
+Enhanced GPTyrant includes all core functionality plus:
+
+##### `updateConfig(newConfig: Partial<EnhancedConfig>)`
+
+Updates the configuration including enhanced features.
+
+##### `setApiKey(apiKey: string, provider?: ProviderType)`
+
+Sets the API key and optionally changes the provider.
+
+##### `generateResponse(message: string)`
+
+Generates a response and automatically manages conversation history.
+
+##### `saveCurrentConversation()`
+
+Saves the current conversation to history.
+
+##### `newConversation(systemPrompt?: string)`
+
+Starts a new conversation with an optional custom system prompt.
+
+##### `addFeedback(feedback: string)`
+
+Records user feedback for the last conversation.
+
+##### `getHistory()`
+
+Returns the conversation history.
+
+##### `getCurrentConversation()`
+
+Returns the current conversation messages.
+
+##### `saveConfig()`
+
+Saves the current configuration to file.
+
+### Helper Function
+
+#### `createEnhancedTyrant(configPath?: string)`
+
+A factory function that creates a new enhanced GPTyrant instance.
+
+**Parameters:**
+- `configPath` (string, optional): Path to the configuration file
+
+**Returns:** A new GPTyrantEnhanced instance
+
+**Example:**
+```typescript
+import { createEnhancedTyrant } from 'gptyrant/enhanced';
+
+const tyrant = createEnhancedTyrant();
+```
 
 ## Types and Interfaces
 
-### Message
+### `TyrantOptions`
+
+Configuration options for GPTyrant.
+
+```typescript
+interface TyrantOptions {
+  sassLevel: number;       // Level of sassiness/harshness (1-10)
+  focusAreas: string[];    // Areas to focus on in responses
+  temperature?: number;    // Temperature for response generation
+  maxTokens?: number;      // Maximum tokens in responses
+  provider?: ProviderType; // AI provider to use
+  model?: string;          // Model name to use
+}
+```
+
+### `Message`
+
+A message in a conversation.
 
 ```typescript
 interface Message {
@@ -160,7 +260,9 @@ interface Message {
 }
 ```
 
-### MessageContent
+### `MessageContent`
+
+Content in a message, supporting both text and images.
 
 ```typescript
 type MessageContent = {
@@ -174,85 +276,49 @@ type MessageContent = {
 };
 ```
 
-### ProviderType
+### `ProviderType`
+
+Supported AI providers.
 
 ```typescript
 type ProviderType = 'openai' | 'anthropic' | 'grok' | 'vertex';
 ```
 
-### TyrantOptions
+### Enhanced Types
+
+#### `EnhancedConfig`
+
+Extended configuration for GPTyrantEnhanced.
 
 ```typescript
-interface TyrantOptions {
-  sassLevel: number;
-  focusAreas: string[];
-  temperature?: number;
-  maxTokens?: number;
-  provider?: ProviderType;
-  model?: string;
+interface EnhancedConfig extends TyrantOptions {
+  historySize: number;       // Number of conversations to keep
+  autoSaveHistory: boolean;  // Whether to auto-save history
+  feedbackPrompt: string;    // Prompt for requesting feedback
+  historyPath: string;       // Path to save history
 }
 ```
 
-### AIProvider
+#### `ConversationEntry`
+
+A conversation entry in history.
 
 ```typescript
-interface AIProvider {
-  generateCompletion(messages: Message[], options: TyrantOptions): Promise<string>;
-  getSystemPrompt(options: TyrantOptions): Message;
+interface ConversationEntry {
+  timestamp: string;
+  messages: Message[];
+  feedback?: string;
 }
 ```
 
-## Standalone Functions
+## Minimal Version
 
-### generateToughLoveResponse
+The standalone minimal version in `gptyrant_minimal.ts` provides a simplified version of the API with only the core functions.
 
-```typescript
-export async function generateToughLoveResponse(
-  message: string,
-  apiKey: string,
-  options: Partial<TyrantOptions> = {}
-): Promise<string>
-```
+See the [standalone version documentation](../gptyrant_minimal.ts) for more details.
 
-Generate a tough love response without creating a GPTyrant instance.
+## Web Version
 
-**Parameters:**
-- `message` (string): The user's message
-- `apiKey` (string): API key for the provider
-- `options` (Partial\<TyrantOptions\>): Configuration options
+The browser-compatible version in `gptyrant_web.js` is designed for direct inclusion in web pages.
 
-**Returns:**
-- Promise\<string\>: The assistant's response
-
-**Example:**
-```typescript
-const response = await generateToughLoveResponse(
-  'I keep procrastinating on my project',
-  'your-api-key',
-  { sassLevel: 9 }
-);
-```
-
-## Browser API
-
-When using the browser version (`gptyrant_web.js`), the API is slightly different:
-
-### GPTyrant.create
-
-```javascript
-GPTyrant.create(apiKey, customOptions = {})
-```
-
-**Returns an object with:**
-
-- `generateResponse(input, runtimeOptions = {})`
-- `updateOptions(newOptions)`
-- `setSassLevel(level)`
-- `getSystemPrompt()`
-- `getOptions()`
-
-**Example:**
-```javascript
-const tyrant = GPTyrant.create('your-api-key', { sassLevel: 8 });
-const response = await tyrant.generateResponse('I need motivation');
-```
+See the [web version documentation](../gptyrant_web.js) for more details.

@@ -2,7 +2,6 @@
 
 GPTyrant is a cross-provider AI library that creates a no-nonsense, tough love AI personality designed to push users past their excuses and toward their goals. 
 
-[![npm version](https://img.shields.io/npm/v/gptyrant-core.svg)](https://www.npmjs.com/package/gptyrant-core)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Features
@@ -19,7 +18,7 @@ GPTyrant is a cross-provider AI library that creates a no-nonsense, tough love A
 ### NPM Package (Recommended)
 
 ```bash
-npm install gptyrant-core
+npm install gptyrant
 ```
 
 ### Direct Import
@@ -32,7 +31,7 @@ For quick use without npm, you can download and include one of the standalone fi
 ## Quick Start
 
 ```javascript
-import { GPTyrant } from 'gptyrant-core';
+import { GPTyrant } from 'gptyrant';
 
 // Create a new GPTyrant instance with OpenAI (default provider)
 const tyrant = new GPTyrant('your-openai-api-key', {
@@ -45,12 +44,30 @@ const response = await tyrant.generateResponse('I keep putting off my project be
 console.log(response);
 ```
 
+## Demo
+
+Try the mock demonstration without needing API keys:
+
+```bash
+npx tsx demo.ts
+```
+
+For the real implementation using actual API calls:
+
+```bash
+# Set your API key as an environment variable
+export OPENAI_API_KEY="your-openai-api-key"
+
+# Run the main demo
+npx tsx main.ts
+```
+
 ## Using Other AI Providers
 
 ### Anthropic (Claude)
 
 ```javascript
-import { GPTyrant } from 'gptyrant-core';
+import { GPTyrant } from 'gptyrant';
 
 const tyrant = new GPTyrant('your-anthropic-api-key', {
   provider: 'anthropic',
@@ -63,7 +80,7 @@ const response = await tyrant.generateResponse('I need help staying on track wit
 ### Grok (by xAI)
 
 ```javascript
-import { GPTyrant } from 'gptyrant-core';
+import { GPTyrant } from 'gptyrant';
 
 const tyrant = new GPTyrant('your-xai-api-key', {
   provider: 'grok',
@@ -76,7 +93,7 @@ const response = await tyrant.generateResponse('I need to stop making excuses fo
 ### Google Vertex AI
 
 ```javascript
-import { GPTyrant } from 'gptyrant-core';
+import { GPTyrant } from 'gptyrant';
 
 const tyrant = new GPTyrant('your-google-vertex-api-key', {
   provider: 'vertex',
@@ -124,7 +141,7 @@ The GPTyrant constructor and `generateResponse` method accept these options:
 ### Conversation History
 
 ```javascript
-import { GPTyrant } from 'gptyrant-core';
+import { GPTyrant } from 'gptyrant';
 
 const tyrant = new GPTyrant('your-api-key');
 
@@ -142,7 +159,7 @@ const response = await tyrant.generateResponse(messages);
 ### Changing Providers Mid-Session
 
 ```javascript
-import { GPTyrant } from 'gptyrant-core';
+import { GPTyrant } from 'gptyrant';
 
 const tyrant = new GPTyrant('your-openai-api-key');
 
@@ -158,15 +175,45 @@ const response = await tyrant.generateResponse('Help me stay motivated');
 For simple one-time use without creating an instance:
 
 ```javascript
-import { generateToughLoveResponse } from 'gptyrant-core';
+import { generateToughLoveResponse } from 'gptyrant';
 
 // Quick one-time usage
 const response = await generateToughLoveResponse(
-  'I keep procrastinating on my project',
   'your-api-key',
-  { provider: 'openai', sassLevel: 9 }
+  'I keep procrastinating on my project',
+  { sassLevel: 9 }
 );
 ```
+
+## Enhanced Version
+
+For applications that need more features, use the enhanced version:
+
+```javascript
+import { createEnhancedTyrant } from 'gptyrant/enhanced';
+
+// Create an enhanced GPTyrant with history, config management, etc.
+const tyrant = createEnhancedTyrant();
+
+// Set API key if not configured
+tyrant.setApiKey('YOUR_API_KEY', 'openai');
+
+// Generate a response (conversation history is managed automatically)
+const response = await tyrant.generateResponse(
+  "I've been saying I'll start my business for years but never do it"
+);
+
+console.log(response);
+
+// Start a new conversation
+tyrant.newConversation();
+```
+
+## Documentation
+
+- [Installation Guide](./docs/INSTALLATION.md)
+- [API Documentation](./docs/API_DOCS.md)
+- [Examples](./examples/)
 
 ## License
 
