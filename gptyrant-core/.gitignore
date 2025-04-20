@@ -62,3 +62,7 @@ thumbs.db
 /.api-config
 /examples/local-config.js
 /examples/api-test-results.json
+
+# User-attached assets
+/attached_assets/
+../attached_assets/
