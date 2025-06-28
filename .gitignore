@@ -1,27 +1,27 @@
 # Dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
-/package-lock.json
-/yarn.lock
-/pnpm-lock.yaml
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
 # Build directories
-/dist
-/lib
-/build
-/.next
-/out
+dist/
+lib/
+build/
+.next/
+out/
 
 # Cache directories
-/.cache
-/.eslintcache
-/.babel-cache
-/.tsbuildinfo
-/.vscode
-/.vs
-/.idea
-/.DS_Store
+.cache/
+.eslintcache
+.babel-cache
+.tsbuildinfo
+.vscode/
+.vs/
+.idea/
+.DS_Store
 
 # Environment files
 .env
@@ -37,18 +37,16 @@ yarn-error.log*
 lerna-debug.log*
 
 # Testing
-/coverage
-/.nyc_output
-/test-results
+coverage/
+.nyc_output/
+test-results/
 
 # Misc
-/tmp
-/.tmp
+tmp/
 .tmp/
-/temp
+temp/
 *.pem
 Thumbs.db
-.DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
@@ -57,12 +55,11 @@ ehthumbs.db
 thumbs.db
 
 # Specific to GPTyrant
-/api-keys.json
-/secrets.json
-/.api-config
-/examples/local-config.js
-/examples/api-test-results.json
+api-keys.json
+secrets.json
+.api-config
+examples/local-config.js
+examples/api-test-results.json
 
-# User-attached assets
-/attached_assets/
-../attached_assets/
+# User-attached assets (development only)
+attached_assets/

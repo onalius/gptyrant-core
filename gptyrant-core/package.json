@@ -34,12 +34,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/gptyrant-core.git"
+    "url": "https://github.com/yourusername/gptyrant.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/gptyrant-core/issues"
+    "url": "https://github.com/yourusername/gptyrant/issues"
   },
-  "homepage": "https://github.com/yourusername/gptyrant-core#readme",
+  "homepage": "https://github.com/yourusername/gptyrant#readme",
   "peerDependencies": {
     "@anthropic-ai/sdk": "^0.9.0",
     "openai": "^4.11.0"
