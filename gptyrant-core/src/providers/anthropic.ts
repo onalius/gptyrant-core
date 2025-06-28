@@ -75,7 +75,7 @@ Remember: Your goal is not to be mean, but to motivate through a no-BS approach 
       // Calculate temperature based on sass level
       const temperature = options.temperature ?? (0.7 + (options.sassLevel * 0.03)); 
 
-      const response = await this.client.messages.create({
+      const response = await (this.client as any).messages.create({
         model: options.model || this.model,
         max_tokens: options.maxTokens || 600,
         temperature,

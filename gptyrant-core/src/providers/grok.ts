@@ -61,9 +61,16 @@ Remember: Your goal is not to be mean, but to motivate through a no-BS approach 
       // Calculate temperature based on sass level
       const temperature = options.temperature ?? (0.7 + (options.sassLevel * 0.03)); 
 
+      // Convert our Message format to Grok's expected format
+      const formattedMessages = conversationWithSystem.map(msg => ({
+        role: msg.role,
+        content: typeof msg.content === 'string' ? msg.content : 
+          msg.content.filter(c => c.type === 'text').map(c => 'text' in c ? c.text : '').join('\n')
+      }));
+
       const response = await this.client.chat.completions.create({
         model: options.model || this.model,
-        messages: conversationWithSystem,
+        messages: formattedMessages,
         temperature,
         max_tokens: options.maxTokens || 600
       });
