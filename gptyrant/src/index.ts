@@ -12,7 +12,7 @@ import { AIProvider, Message, ProviderType, TyrantOptions } from './types';
 import { OpenAIProvider } from './providers/openai';
 import { AnthropicProvider } from './providers/anthropic';
 import { GrokProvider } from './providers/grok';
-import { VertexProvider } from './providers/vertex';
+import { GeminiProvider } from './providers/gemini';
 
 const DEFAULT_OPTIONS: TyrantOptions = {
   sassLevel: 7,
@@ -45,8 +45,8 @@ export class GPTyrant {
       case 'grok':
         this.provider = new GrokProvider(apiKey, this.options.model);
         break;
-      case 'vertex':
-        this.provider = new VertexProvider(apiKey, this.options.model);
+      case 'gemini':
+        this.provider = new GeminiProvider(apiKey, this.options.model);
         break;
       case 'openai':
       default:
@@ -101,8 +101,8 @@ export class GPTyrant {
       case 'grok':
         this.provider = new GrokProvider(apiKey, model);
         break;
-      case 'vertex':
-        this.provider = new VertexProvider(apiKey, model);
+      case 'gemini':
+        this.provider = new GeminiProvider(apiKey, model);
         break;
       case 'openai':
       default:
@@ -119,7 +119,7 @@ export * from './types';
 export * from './providers/openai';
 export * from './providers/anthropic';
 export * from './providers/grok';
-export * from './providers/vertex';
+export * from './providers/gemini';
 
 // Export a simplified function for quick usage
 /**

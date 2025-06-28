@@ -13,7 +13,7 @@ export type MessageContent = {
   };
 };
 
-export type ProviderType = 'openai' | 'anthropic' | 'grok' | 'vertex';
+export type ProviderType = 'openai' | 'anthropic' | 'grok' | 'gemini';
 
 export interface TyrantOptions {
   sassLevel: number;

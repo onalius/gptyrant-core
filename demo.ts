@@ -26,7 +26,7 @@ interface Message {
 interface TyrantOptions {
   sassLevel: number;
   focusAreas: string[];
-  provider?: 'openai' | 'anthropic' | 'grok' | 'vertex';
+  provider?: 'openai' | 'anthropic' | 'grok' | 'gemini';
   model?: string;
   temperature?: number;
   maxTokens?: number;

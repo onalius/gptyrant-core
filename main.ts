@@ -21,17 +21,17 @@ const api_keys = {
   openai: process.env.OPENAI_API_KEY || "",
   anthropic: process.env.ANTHROPIC_API_KEY || "",
   grok: process.env.XAI_API_KEY || "",
-  vertex: process.env.GOOGLE_API_KEY || ""
+  gemini: process.env.GOOGLE_API_KEY || ""
 };
 
 // Check if we have at least one API key available
-if (!api_keys.openai && !api_keys.anthropic && !api_keys.grok && !api_keys.vertex) {
+if (!api_keys.openai && !api_keys.anthropic && !api_keys.grok && !api_keys.gemini) {
   console.error(`
 Error: No API keys found. Please set at least one of the following environment variables:
   - OPENAI_API_KEY (for OpenAI models)
   - ANTHROPIC_API_KEY (for Claude models)
   - XAI_API_KEY (for Grok models)
-  - GOOGLE_API_KEY (for Vertex AI models)
+  - GOOGLE_API_KEY (for Google Gemini models)
   
 For this demo, we'll be using OpenAI as the default provider.
 `);
@@ -41,7 +41,7 @@ For this demo, we'll be using OpenAI as the default provider.
 // Select the first available API key and provider for the demo
 const selectedProvider = api_keys.openai ? 'openai' : 
                         api_keys.anthropic ? 'anthropic' : 
-                        api_keys.grok ? 'grok' : 'vertex';
+                        api_keys.grok ? 'grok' : 'gemini';
 
 const API_KEY = api_keys[selectedProvider];
 

@@ -2,9 +2,9 @@ import { AIProvider, Message, TyrantOptions } from "../types";
 
 const DEFAULT_MODEL = "gemini-1.5-pro-001";
 
-// Note: Vertex AI requires additional setup for Google Cloud authentication
-// This implementation is simplified and would need to be integrated with proper Google Cloud auth
-export class VertexProvider implements AIProvider {
+// Note: Google Gemini requires an API key from Google AI Studio
+// This implementation is simplified and would need to be integrated with proper Google API auth
+export class GeminiProvider implements AIProvider {
   private apiKey: string;
   private model: string;
   
@@ -53,17 +53,17 @@ Remember: Your goal is not to be mean, but to motivate through a no-BS approach 
 
   public async generateCompletion(messages: Message[], options: TyrantOptions): Promise<string> {
     try {
-      // Note: This is a placeholder for Vertex AI implementation
-      // In a real implementation, this would use the Google Cloud Vertex AI client
+      // Note: This is a placeholder for Google Gemini implementation
+      // In a real implementation, this would use the Google Gemini API client
       
       // For this simplified version, we'll simulate a response with error handling
       if (!this.apiKey) {
-        throw new Error("Vertex AI API key is required");
+        throw new Error("Google Gemini API key is required");
       }
       
       // Create a response simulation for demonstration purposes
       // This would be replaced with actual API calls in production
-      const systemPrompt = this.getSystemPrompt(options);
+      // In a real implementation, we would use systemPrompt and this.model
       const userMessage = messages.find(msg => msg.role === 'user')?.content || '';
       
       // Simulated response based on the sass level
@@ -73,10 +73,10 @@ Remember: Your goal is not to be mean, but to motivate through a no-BS approach 
           ? "Look, " 
           : "I understand, but ";
       
-      return `${simulationPrefix}This is a simulated Vertex AI response. In a real implementation, this would call the Google Cloud Vertex AI API. Your message: "${typeof userMessage === 'string' ? userMessage : 'Complex message'}" would get a properly formatted tough love response.`;
+      return `${simulationPrefix}This is a simulated Google Gemini response. In a real implementation, this would call the Google Gemini API with model ${this.model}. Your message: "${typeof userMessage === 'string' ? userMessage : 'Complex message'}" would get a properly formatted tough love response.`;
       
     } catch (error: any) {
-      console.error("Vertex AI error:", error);
+      console.error("Google Gemini error:", error);
       throw new Error(`Failed to generate response: ${error.message}`);
     }
   }
